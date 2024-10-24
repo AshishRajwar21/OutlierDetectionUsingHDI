@@ -109,9 +109,9 @@ def load_data(file_path):
 # file_to_load = r"D:\spyder\Data\2dim\DS10.txt"
 # file_to_load = r"D:\spyder\Data\2dim\DS11.txt"
 # file_to_load = r"D:\spyder\Data\2dim\DS12.txt"
-file_to_load = "DS02.txt"
+# file_to_load = "DS02.txt"
 # file_to_load = "DS11.txt"
-# file_to_load = "DS04.txt"
+file_to_load = "DS04.txt"
 # file_to_load = "DS03.txt"
 df = load_data(file_to_load)
 
@@ -134,20 +134,23 @@ c = 3
 
 new_outlier_scores = []
 for i,score in enumerate(outlier_scores) :
-    if score>=1 :
+    if i in low_density_indices :
         new_outlier_scores.append(score)
 # median of only 10% of data points jinka hmne outlier score nikala h
 median_of_OS = np.median(new_outlier_scores) 
 
-median_of_OS_minus_median = np.median(abs(new_outlier_scores - median_of_OS))
+# median_of_OS_minus_median = np.median(abs(new_outlier_scores - median_of_OS))
+# median_of_OS_minus_median = median_of_OS + \
+                        # np.mean((new_outlier_scores - median_of_OS)**2)/np.mean(new_outlier_scores)
 
 ## median of all data points outlier score 
 # median_of_OS = np.median(outlier_scores)
 # median_of_OS_minus_median = np.median(abs(outlier_scores - median_of_OS))
 
 
-mad = b * median_of_OS_minus_median
-threshold = median_of_OS + a * mad
+# mad = b * median_of_OS_minus_median
+# threshold = median_of_OS + a * mad
+threshold = median_of_OS + np.mean((new_outlier_scores - median_of_OS)**2)/np.mean(new_outlier_scores)
 
 # threshold = median_of_OS + c * median_of_OS_minus_median
 
@@ -168,7 +171,7 @@ for i in range(S):
     if i not in outliers and X[i][2]==1:
         # print(x[0]," ",x[1]," ",x[2])
         new_matrix.append([i,local_densities[i],outlier_scores[i],1,0])
-        out[i] = 1
+        out[i] = 0
 
 
 for x in matrix:

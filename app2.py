@@ -16,9 +16,9 @@ def find_local_density(distances, k, dimension):
         density_sum += ((1 / (2 * math.pi)) ** dimension) * math.exp(-0.5 * (dist) ** 2)
     return density_sum / k
 
-def outlier_detection(X, k, dimension, density_percentile=10):
+def outlier_detection(X, k, dimension, density_percentile):
     # Step 1: Calculate k-NN graph
-    knn_graph = NearestNeighbors(n_neighbors=k).fit(X)
+    knn_graph = NearestNeighbors(n_neighbors=k+1).fit(X)
 
     # Step 2: Initialize outlier scores
     # outlier_scores = np.ones(len(X))
@@ -101,7 +101,10 @@ def load_data(file_path):
 # file_to_load = r"D:\spyder\Data\2dim\DS12.txt"
 # file_to_load = "DS02.txt"
 # file_to_load = "DS11.txt"
-file_to_load = "DS04.txt"
+file_to_load = "DS05.txt"
+# file_to_load = "DS04.txt"
+# file_to_load = "DS02.txt"
+# file_to_load = "DS03.txt"
 df = load_data(file_to_load)
 
 
@@ -118,8 +121,8 @@ local_densities,outlier_scores,matrix = outlier_detection(new_X, k, dimension, d
 
 # Identify threshold based on outlier_scores
 a = 2.5
-b = 1
-c = 3
+b = 1.4826
+
 
 new_outlier_scores = []
 for i,score in enumerate(outlier_scores) :
@@ -156,7 +159,7 @@ for i in range(S):
     if i not in outliers and X[i][2]==1:
         # print(x[0]," ",x[1]," ",x[2])
         new_matrix.append([i,local_densities[i],outlier_scores[i],1,0])
-        out[i] = 1
+        # out[i] = 1
 
 
 for x in matrix:
